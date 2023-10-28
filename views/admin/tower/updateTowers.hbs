@@ -1,0 +1,41 @@
+<div class="container mt-3">
+  <form action="/towers/{{tw._id}}/edit?id={{userId}}" method="post" enctype="multipart/form-data">
+    <legend>Insert Tower</legend>
+    <div class="mb-3">
+      <label for="disabledTextInput" class="form-label">Name Tower: </label>
+      <input type="text" id="disabledTextInput" class="form-control" name="nameTower" placeholder="Name Tower"
+        value="{{tw.nameTower}}" />
+    </div>
+    <div class="mb-3">
+      <label for="disabledTextInput" class="form-label">Level Tower: </label>
+      <input type="text" id="disabledTextInput" class="form-control" name="levelTower" placeholder="Level Tower"
+        value="{{tw.levelTower}}" />
+    </div>
+    <div class="mb-3">
+      <label for="disabledTextInput" class="form-label">Describe: </label>
+      <input type="text" id="disabledTextInput" class="form-control" name="describe" placeholder="Describe"
+        value="{{tw.describe}}" />
+    </div>
+    <div class="mb-3">
+      <label for="formFileSm" class="form-label">Image: </label>
+      <input type="file" name="image" id="image" value="{{tw.image}}" onchange="loadFile(event);" />
+    </div>
+    <div class="mb-3">
+      <img name="image" id="img-display" src="/images/{{tw.image}}" width="150px" height="150px">
+    </div>
+    <button type="submit" class="btn btn-outline-success">Submit</button>
+  </form>
+</div>
+
+
+<script>
+  const loadFile = function (event) {
+    const reader = new FileReader();
+    reader.onload = function () {
+      var output = document.getElementById('img-display');
+      output.src = reader.result;
+    };
+    reader.readAsDataURL(event.target.files[0]);
+  };
+
+</script>

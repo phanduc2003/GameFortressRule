@@ -1,0 +1,140 @@
+<div class="wrapper d-flex align-items-stretch">
+  <nav id="sidebar" class="fixed-top">
+    <div class="p-4 pt-5">
+      <a href="#" class="img logo rounded-circle mb-5" style="background-image: url(images/avatar.png);"></a>
+      <ul class="list-unstyled components mb-5">
+        <li>
+          <a href="#" onclick="goHomeAdmin();">Home</a>
+        </li>
+        <li>
+          <a href="#" onclick="goUsers();">Users</a>
+        </li>
+        <li>
+          <a href="#" onclick="goTowers();">Towers</a>
+        </li>
+        <li>
+          <a href="#" onclick="goCurrencies();">Currencies</a>
+        </li>
+        <li>
+          <a href="#" onclick="goMaps();">Maps</a>
+        </li>
+        <li>
+          <a href="#" onclick="goItems();">Items</a>
+        </li>
+        <li class="active">
+          <a href="#" onclick="goEnemies();">Enemies</a>
+        </li>
+        <li>
+          <a class="btn btn-outline-dark" href="/logout">LOG OUT</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Page Content  -->
+  <div id="content" class="p-4 p-md-5">
+    <div class="box-header d-flex justify-content-between align-items-center">
+      <h3 class="box-title"><b>Enemies Table</b></h3>
+      <button class="btn btn-primary" onclick="goNew();">New</button>
+    </div><!-- /.box-header -->
+    <table class="table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Image</th>
+          <th>Name Enemy</th>
+          <th>Health</th>
+          <th>Speed</th>
+          <th>Ability</th>
+          <th>Operation</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each mt}}
+        <tr>
+          <td>{{index}}</td>
+          <td><img src="images/{{image}}" alt="" width="150px" height="150px" /></td>
+          <td>{{nameEnemy}}</td>
+          <td>{{health}}</td>
+          <td>{{speed}}</td>
+          <td>{{ability}}</td>
+          <td>
+            <button class="btn btn-outline-warning" onclick="goEdit('{{_id}}');">Edit</button>
+            <button class="btn btn-outline-dark" onclick="goDel('{{_id}}');">Delete</button>
+          </td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  function goDel(id) {
+    if (confirm("Ban co chac muon xoa?")) {
+      const userId = extractUserIdFromURL();
+      location.href = `/enemy/${id}/deleteById?id=${userId}`;
+    }
+  }
+
+  //chuyển sang trang new
+  const goNew = () => {
+    const userId = extractUserIdFromURL();
+    window.location.href = `/enemy/new?id=${userId}`;
+  }
+
+  //Cap nhap san pham
+  function goEdit(id) {
+    const userId = extractUserIdFromURL();
+    location.href = `/enemy/${id}/edit?id=${userId}`;
+  }
+
+  function extractUserIdFromURL() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const userId = urlParams.get('id');
+    return userId;
+  }
+
+  function goHomeAdmin() {
+    const userId = extractUserIdFromURL();
+    window.location.href = `/homeAdmin?id=${userId}`;
+  }
+
+  const goUsers = () => {
+    const userId = extractUserIdFromURL();
+    window.location.href = `/user?id=${userId}`;
+  }
+  const goTowers = () => {
+    const userId = extractUserIdFromURL();
+    window.location.href = `/towers?id=${userId}`;
+  }
+  const goCurrencies = () => {
+    const userId = extractUserIdFromURL();
+    window.location.href = `/currencies?id=${userId}`;
+  }
+  const goMaps = () => {
+    const userId = extractUserIdFromURL();
+    window.location.href = `/maps?id=${userId}`;
+  }
+  const goItems = () => {
+    const userId = extractUserIdFromURL();
+    window.location.href = `/items?id=${userId}`;
+  }
+  const goEnemies = () => {
+    const userId = extractUserIdFromURL();
+    window.location.href = `/enemy?id=${userId}`;
+  }
+
+</script>
+
+<style>
+  #content {
+    margin-left: 300px;
+  }
+
+  #sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+  }
+</style>

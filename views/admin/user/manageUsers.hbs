@@ -1,0 +1,127 @@
+<div class="wrapper d-flex align-items-stretch">
+  <nav id="sidebar" class="fixed-top">
+    <div class="p-4 pt-5">
+      <a href="#" class="img logo rounded-circle mb-5" style="background-image: url(images/avatar.png);"></a>
+      <ul class="list-unstyled components mb-5">
+        <li>
+          <a href="#" onclick="goHomeAdmin();">Home</a>
+        </li>
+        <li class="active">
+          <a href="#" onclick="goUsers();">Users</a>
+        </li>
+        <li>
+          <a href="#" onclick="goTowers();">Towers</a>
+        </li>
+        <li>
+          <a href="#" onclick="goCurrencies();">Currencies</a>
+        </li>
+        <li>
+          <a href="#" onclick="goMaps();">Maps</a>
+        </li>
+        <li>
+          <a href="#" onclick="goItems();">Items</a>
+        </li>
+        <li>
+          <a href="#" onclick="goEnemies();">Enemies</a>
+        </li>
+        <li>
+          <a class="btn btn-outline-dark" href="/logout">LOG OUT</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+
+  <!-- Page Content  -->
+  <div id="content" class="p-4 p-md-5">
+    <div class="box-header d-flex justify-content-between align-items-center">
+      <h3 class="box-title"><b>Users Table</b></h3>
+    </div><!-- /.box-header -->
+    <table class="table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Tên người dùng</th>
+          <th>Email</th>
+          <th>Trạng thái admin</th>
+          <th>Thao tác</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each nd}}
+        <tr>
+          <td>{{index}}</td>
+          <td>{{username}}</td>
+          <td>{{email}}</td>
+          <td>{{checkAdmin}}</td>
+          <td>
+            <button class="btn btn-outline-dark" onclick="goDel('{{_id}}');">Delete</button>
+          </td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  
+  function goDel(id) {
+    if (confirm("Ban co chac muon xoa?")) {
+      const userId = extractUserIdFromURL();
+      location.href = `/user/${id}/deleteById?id=${userId}`;
+    }
+  }
+
+  function goHomeAdmin() {
+    const userId = extractUserIdFromURL();
+    window.location.href = `/homeAdmin?id=${userId}`;
+  }
+
+  const goUsers = () => {
+    const userId = extractUserIdFromURL();
+    window.location.href = `/user?id=${userId}`;
+  }
+  const goTowers = () => {
+    const userId = extractUserIdFromURL();
+    window.location.href = `/towers?id=${userId}`;
+  }
+  const goCurrencies = () => {
+    const userId = extractUserIdFromURL();
+    window.location.href = `/currencies?id=${userId}`;
+  }
+  const goMaps = () => {
+    const userId = extractUserIdFromURL();
+    window.location.href = `/maps?id=${userId}`;
+  }
+  const goItems = () => {
+    const userId = extractUserIdFromURL();
+    window.location.href = `/items?id=${userId}`;
+  }
+  const goEnemies = () => {
+    const userId = extractUserIdFromURL();
+    window.location.href = `/enemy?id=${userId}`;
+  }
+
+  // Sử dụng JavaScript để trích xuất user._id từ đường dẫn
+  function extractUserIdFromURL() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const userId = urlParams.get('id');
+    return userId;
+  }
+
+  
+
+</script>
+
+<style>
+  #content {
+    margin-left: 300px;
+  }
+
+  #sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+  }
+</style>

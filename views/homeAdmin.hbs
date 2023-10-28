@@ -1,0 +1,92 @@
+<div class="wrapper d-flex align-items-stretch">
+    <nav id="sidebar" class="fixed-top">
+        <div class="p-4 pt-5">
+            <a href="#" class="img logo rounded-circle mb-5" style="background-image: url(images/avatar.png);"></a>
+            <ul class="list-unstyled components mb-5">
+                <li class="active">
+                    <a href="#">Home</a>
+                </li>
+                <li>
+                    <a href="#" onclick="goUsers('{{user._id}}')">Users</a>
+                </li>
+                <li>
+                    <a href="#" onclick="goTowers('{{user._id}}')">Towers</a>
+                </li>
+                <li>
+                    <a href="#" onclick="goCurrencies('{{user._id}}');">Currencies</a>
+                </li>
+                <li>
+                    <a href="#" onclick="goMaps('{{user._id}}');">Maps</a>
+                </li>
+                <li>
+                    <a href="#" onclick="goItems('{{user._id}}');">Items</a>
+                </li>
+                <li>
+                    <a href="#" onclick="goEnemies('{{user._id}}');">Enemies</a>
+                </li>
+                <li>
+                    <a class="btn btn-outline-dark" href="/logout">LOG OUT</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Content  -->
+    <div id="content" class="p-4 p-md-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 personal-info">
+                    <h1>Your Profile</h1>
+                    <ul>
+                        <p><strong>Username:</strong> {{user.username}}</p>
+                        <p><strong>Email:</strong> {{user.email}}</p>
+                        <button class="btn btn-outline-dark" onclick="goEditProfile('{{user._id}}')">Update Your Profile</button>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    const goEditProfile = (userId) => {
+        window.location.href = `/${userId}/edit`;
+    }
+    const goUsers = (userId) => {
+        window.location.href = `/user?id=${userId}`;
+    };
+    const goTowers = (userId) => {
+        window.location.href = `/towers?id=${userId}`;
+    }
+    const goCurrencies = (userId) => {
+        window.location.href = `/currencies?id=${userId}`;
+    }
+    const goMaps = (userId) => {
+        window.location.href = `/maps?id=${userId}`;
+    }
+    const goItems = (userId) => {
+        window.location.href = `/items?id=${userId}`;
+    }
+    const goEnemies = (userId) => {
+        window.location.href = `/enemy?id=${userId}`;
+    }
+
+</script>
+
+<style>
+    .personal-info {
+        border: 1px solid #000000;
+        padding: 20px;
+    }
+
+    #content {
+        margin-left: 300px;
+    }
+
+    #sidebar {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+    }
+</style>

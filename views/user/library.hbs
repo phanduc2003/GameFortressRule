@@ -1,0 +1,305 @@
+<div class="wrapper d-flex align-items-stretch">
+    <nav id="sidebar" class="fixed-top">
+        <div class="p-4 pt-5">
+            <a href="#" class="img logo rounded-circle mb-5" style="background-image: url(images/avatar.png);"></a>
+            <ul class="list-unstyled components mb-5">
+                <li>
+                    <a href="#" onclick="goHome();">Home</a>
+                </li>
+                <li class="active">
+                    <a href="#">Library</a>
+                </li>
+                <li>
+                    <a href="#">Rechange</a>
+                </li>
+                <li>
+                    <a href="#">History</a>
+                </li>
+                <li>
+                    <a class="btn btn-outline-dark" href="/logout">LOG OUT</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Content  -->
+    <div id="content" class="p-4 p-md-5">
+        <div class="box-header d-flex justify-content-between align-items-center">
+            <h3 class="box-title"><b>L I B R A R Y</b></h3>
+        </div><!-- /.box-header -->
+        <div class="list-unstyled components mb-5">
+            <li>
+                <button class="btn btn-outline-dark" onclick="showTab('enemies')">Enemies</button>
+
+                <button class="btn btn-outline-dark" onclick="showTab('towers')">Towers</button>
+
+                <button class="btn btn-outline-dark" onclick="showTab('maps')">Maps</button>
+
+                <button class="btn btn-outline-dark" onclick="showTab('items')">Items</button>
+            </li>
+        </div>
+        <!-- Bảng Enemies -->
+        <div class="row">
+            <div class="col-md-8">
+                <div class="content-tab" id="enemies-content">
+                    <ul class="grid-container">
+                        {{#each enemies}}
+                        <li class="grid-item"
+                            onclick="showDetail({nameEnemy: '{{nameEnemy}}', imageEnemy: '{{image}}', health: '{{health}}', speed: '{{speed}}', ability: '{{ability}}'})">
+                            <div class="card" style="width: 18rem;">
+                                <img class="card-img-top" src="images/{{image}}" alt="Card image cap">
+                                <div class="card-body">
+                                    <p class="card-text">{{nameEnemy}}</p>
+                                </div>
+                            </div>
+                        </li>
+                        {{/each}}
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <!-- Nội dung chi tiết -->
+                <div id="detail-container" class="d-none">
+                    <!-- Nội dung chi tiết sẽ được hiển thị ở đây -->
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8">
+                <div class="content-tab" id="towers-content">
+                    <ul class="grid-container">
+                        {{#each towers}}
+                        <li class="grid-item"
+                            onclick="showDetail({nameTower: '{{nameTower}}', imageTower: '{{image}}', levelTower: '{{levelTower}}', describeTower: '{{describe}}'})">
+                            <div class="card" style="width: 18rem;">
+                                <img class="card-img-top" src="images/{{image}}" alt="Card image cap">
+                                <div class="card-body">
+                                    <p class="card-text">{{nameTower}}</p>
+                                </div>
+                            </div>
+                        </li>
+                        {{/each}}
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <!-- Nội dung chi tiết -->
+                <div id="detail-container" class="d-none">
+                    <!-- Nội dung chi tiết sẽ được hiển thị ở đây -->
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8">
+                <div class="content-tab" id="maps-content">
+                    <ul class="grid-container">
+                        {{#each maps}}
+                        <li class="grid-item"
+                            onclick="showDetail({nameMap: '{{nameMap}}', imageMap: '{{image}}', information: '{{information}}'})">
+                            <div class="card" style="width: 18rem;">
+                                <img class="card-img-top" src="images/{{image}}" alt="Card image cap">
+                                <div class="card-body">
+                                    <p class="card-text">{{nameMap}}</p>
+                                </div>
+                            </div>
+                        </li>
+                        {{/each}}
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <!-- Nội dung chi tiết -->
+                <div id="detail-container" class="d-none">
+                    <!-- Nội dung chi tiết sẽ được hiển thị ở đây -->
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8">
+                <div class="content-tab" id="items-content">
+                    <ul class="grid-container">
+                        {{#each items}}
+                        <li class="grid-item"
+                            onclick="showDetail({nameItem: '{{nameItem}}', imageItem: '{{image}}', priceItem: '{{priceItem}}', describeItem: '{{describe}}'})">
+                            <div class="card" style="width: 18rem;">
+                                <img class="card-img-top" src="images/{{image}}" alt="Card image cap">
+                                <div class="card-body">
+                                    <p class="card-text">{{nameItem}}</p>
+                                </div>
+                            </div>
+                        </li>
+                        {{/each}}
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <!-- Nội dung chi tiết -->
+                <div id="detail-container" class="d-none">
+                    <!-- Nội dung chi tiết sẽ được hiển thị ở đây -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    
+
+    const goLogout = () => {
+        window.location.href = `/logout`;
+    }
+
+    function extractUserIdFromURL() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const userId = urlParams.get('id');
+        return userId;
+    }
+
+    function goHome() {
+        const userId = extractUserIdFromURL();
+        window.location.href = `/homeUser?id=${userId}`;
+    }
+
+    function showTab(tabName) {
+        // Ẩn tất cả nội dung của các tab
+        const tabs = document.getElementsByClassName('content-tab');
+        for (let tab of tabs) {
+            tab.style.display = 'none';
+        }
+
+        // Ẩn chi tiết
+        const detailContainer = document.getElementById('detail-container');
+        detailContainer.classList.add('d-none');
+
+        const rows = document.getElementsByClassName('row');
+        for (let row of rows) {
+             row.style.height = '0px';
+        }
+
+        // Hiển thị nội dung của tab được chọn
+        document.getElementById(tabName + '-content').style.display = 'block';
+
+        // Loại bỏ lớp 'active' khỏi tất cả các button tab
+        const tabButtons = document.querySelectorAll('.btn');
+        for (let button of tabButtons) {
+            button.classList.remove('active');
+        }
+
+        // Thêm lớp 'active' cho button tab được chọn
+        document.querySelector(`[onclick="showTab('${tabName}')"]`).classList.add('active');
+    }
+
+    // Gọi hàm showTab để hiển thị tab "Enemies" khi trang được tải
+    showTab('enemies');
+
+
+    function showDetail(info) {
+        const detailContainer = document.getElementById('detail-container');
+        let detailContent = "";
+
+        if (info.nameEnemy) {
+            // Chi tiết cho bảng "Enemies"
+            detailContent = `
+                <div class="card" style="width: 18rem;">
+                    <img class="card-img-top" src="images/${info.imageEnemy}" alt="Card image cap" width="150px" height="300px">
+                    <div class="card-body">
+                        <p class="card-text">${info.nameEnemy}</p>
+                        <p class="card-text">Health: ${info.health}</p>
+                        <p class="card-text">Speed: ${info.speed}</p>
+                        <p class="card-text">Ability: ${info.ability}</p>
+                    </div>
+                </div>
+            `;
+        } else if (info.nameTower) {
+            // Chi tiết cho bảng "Towers"
+            detailContent = `
+                <div class="card" style="width: 18rem;">
+                    <img class="card-img-top" src="images/${info.imageTower}" alt="Card image cap" width="150px" height="300px">
+                    <div class="card-body">
+                        <p class="card-text">${info.nameTower}</p>
+                        <p class="card-text">Level: ${info.levelTower}</p>
+                        <p class="card-text">Description: ${info.describeTower}</p>
+                    </div>
+                </div>
+            `;
+        } else if (info.nameMap) {
+            // Chi tiết cho bảng "Maps"
+            detailContent = `
+                <div class="card" style="width: 20rem;">
+                    <img class="card-img-top" src="images/${info.imageMap}" alt="Card image cap" width="600px" height="250px">
+                    <div class="card-body">
+                        <p class="card-text">${info.nameMap}</p>
+                        <p class="card-text">Information: ${info.information}</p>
+                    </div>
+                </div>
+            `;
+        } else if (info.nameItem) {
+            // Chi tiết cho bảng "Items"
+            detailContent = `
+                <div class="card" style="width: 18rem;">
+                    <img class="card-img-top" src="images/${info.imageItem}" alt="Card image cap" width="150px" height="300px">
+                    <div class="card-body">
+                        <p class="card-text">${info.nameItem}</p>
+                        <p class="card-text">Price: ${info.priceItem}</p>
+                        <p class="card-text">Description: ${info.describeItem}</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Hiển thị chi tiết thông tin và cập nhật nội dung
+        detailContainer.innerHTML = detailContent;
+        detailContainer.classList.remove('d-none');
+    }
+</script>
+
+<style>
+    .personal-info {
+        border: 1px solid #000000;
+        padding: 20px;
+    }
+
+    #content {
+        margin-left: 300px;
+    }
+
+    #sidebar {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+    }
+
+    .grid-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        list-style: none;
+        padding: 0;
+    }
+
+    .grid-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 10px;
+        border: 1px solid #ccc;
+    }
+
+    .grid-item img {
+        width: 150px;
+        height: 150px;
+        margin: auto;
+    }
+
+    .btn {
+        margin-right: 10px;
+    }
+</style>

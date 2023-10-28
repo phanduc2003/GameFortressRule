@@ -1,0 +1,47 @@
+<div class="container mt-3">
+  <form action="/maps/{{mp._id}}/edit?id={{userId}}" method="post" enctype="multipart/form-data">
+    <legend>Insert Map</legend>
+    <div class="mb-3">
+      <label for="disabledTextInput" class="form-label">Name Map: </label>
+      <input
+        type="text"
+        id="disabledTextInput" 
+        class="form-control"
+        name="nameMap"
+        placeholder="Name Map"
+        value="{{mp.nameMap}}"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="disabledTextInput" class="form-label">Information: </label>
+      <input
+        type="text"
+        id="disabledTextInput"
+        class="form-control"
+        name="information"
+        placeholder="Information"
+        value="{{mp.information}}"
+      />
+    </div>
+    <div class="mb-3">
+            <label for="formFileSm" class="form-label">Image: </label>
+            <input type="file" name="image" id="image" value="{{mp.image}}" onchange="loadFile(event);" />
+        </div>
+        <div class="mb-3">
+            <img name="image" id="img-display" src="/images/{{mp.image}}" width="150px" height="150px">
+        </div>
+    <button type="submit" class="btn btn-outline-success">Submit</button>
+  </form>
+</div>
+
+
+<script>
+    const loadFile = function (event) {
+        const reader = new FileReader();
+        reader.onload = function () {
+            var output = document.getElementById('img-display');
+            output.src = reader.result;
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    };
+</script>
