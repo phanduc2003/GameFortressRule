@@ -7,10 +7,10 @@
                     <a href="#" onclick="goHome();">Home</a>
                 </li>
                 <li>
-                    <a href="#" onclick="goLibrary('{{user._id}}');">Library</a>
+                    <a href="#" onclick="goLibrary();">Library</a>
                 </li>
                 <li class="active">
-                    <a href="#">Rechange</a>
+                    <a href="#" onclick="goRechange();">Rechange</a>
                 </li>
                 <li>
                     <a href="#">History</a>
@@ -58,9 +58,17 @@
 
 
 <script>
-    const goLibrary = (userId) => {
+    const goLibrary = () => {
         const userId = extractUserIdFromURL();
         window.location.href = `/library?id=${userId}`;
+    }
+    function goHome() {
+        const userId = extractUserIdFromURL();
+        window.location.href = `/homeUser?id=${userId}`;
+    } 
+    const goRechange = () => {
+        const userId = extractUserIdFromURL();
+        window.location.href = `/rechange?id=${userId}`;
     }
 
     const goLogout = () => {
@@ -79,10 +87,7 @@
         return userId;
     }
 
-    function goHome() {
-        const userId = extractUserIdFromURL();
-        window.location.href = `/homeUser?id=${userId}`;
-    }
+    
 
 </script>
 

@@ -14,6 +14,18 @@ async function getAllItem() {
 //INSERT ENEMY
 async function insert(nameItem, priceItem, describe, image) {
     try {
+        if (!nameItem) {
+            return "Please check Name Item";
+        }
+        else if (!priceItem) {
+            return "Please check Price";
+        }
+        else if (!describe) {
+            return "Please check Describe";
+        }
+        else if (!image) {
+            return "Please check Image";
+        }
         let item = new Item({nameItem, priceItem, describe, image});
         await item.save();
         console.log("Insert Item Success..");

@@ -41,8 +41,12 @@ router.post('/new', [middleware.single('image'),], async (req, res, next) => {
         let { file } = req;
         let { nameEnemy, health, speed, ability, image} = req.body;
         image = file ? file.filename : '';
-        await EnemyController.insert( nameEnemy, health, speed, ability, image);
-        res.redirect(`/enemy?id=${userId}`)
+        const errorMessage = await EnemyController.insert( nameEnemy, health, speed, ability, image);
+        if (errorMessage) {
+            res.render('admin/enemy/insertEnemies', { userId: userId, errorMessage: errorMessage });
+        } else {
+            res.redirect(`/enemy?id=${userId}`);
+        }
     } catch (error) {
         console.log(error);
     }

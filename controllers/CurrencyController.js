@@ -14,6 +14,15 @@ async function getAll() {
 //INSERT ENEMY
 async function insert(money, gem, image) {
     try {
+        if (!money) {
+            return "Please check Price";
+        }
+        else if (!gem) {
+            return "Please check Gem";
+        }
+        else if (!image) {
+            return "Please check Image";
+        }
         let currency = new Currency({money, gem, image});
         await currency.save();
         console.log("Insert Category Success..");

@@ -1,17 +1,23 @@
 <div class="container mt-3">
-    <form action="/maps/new?id={{userId}}" method="post" enctype="multipart/form-data"> 
-        <legend>Insert Map</legend> 
+    <form action="/maps/new?id={{userId}}" method="post" enctype="multipart/form-data">
+        <legend>Insert Map</legend>
+        {{#if errorMessage}}
+        <div class="alert alert-danger" role="alert">
+            {{errorMessage}}
+        </div>
+        {{/if}}
         <div class="mb-3">
             <label for="disabledTextInput" class="form-label">Name Map: </label>
-            <input type="text" id="disabledTextInput" class="form-control" name="nameMap"  placeholder="Name Map">
+            <input type="text" id="disabledTextInput" class="form-control" name="nameMap" placeholder="Name Map">
         </div>
         <div class="mb-3">
             <label for="disabledTextInput" class="form-label">Information: </label>
-            <input type="text" id="disabledTextInput" class="form-control" name="information"  placeholder="Information">
+            <input type="text" id="disabledTextInput" class="form-control" name="information" placeholder="Information">
         </div>
         <div class="mb-3">
             <label for="formFileSm" class="form-label">Image: </label>
-            <input type="file" name="image" id="image" value="{{mp.image}}" onchange="loadFile(event);" /> <br />
+            <input type="file" name="image" id="image" value="{{mp.image}}" onchange="loadFile(event);" />
+            <br />
             <img width="100" height="100" id="img-display" alt="Image" src="{{image}}" />
         </div>
         <button type="submit" class="btn btn-outline-success">Submit</button>

@@ -14,6 +14,18 @@ async function getAll() {
 //INSERT ENEMY
 async function insert(nameTower, levelTower, describe, image) {
     try {
+        if (!nameTower) {
+            return "Please check Name Tower";
+        }
+        else if (!levelTower) {
+            return "Please check Level Tower";
+        }
+        else if (!describe) {
+            return "Please check Describe";
+        }
+        else if (!image) {
+            return "Please check Image";
+        }
         let tower = new Tower({nameTower, levelTower, describe, image});
         await tower.save();
         console.log("Insert Category Success..");

@@ -14,6 +14,15 @@ async function getAll() {
 //INSERT MAP
 async function insert(nameMap, information, image) {
     try {
+        if (!nameMap) {
+            return "Please check Name Map";
+        }
+        else if (!information) {
+            return "Please check Information";
+        }
+        else if (!image) {
+            return "Please check Image";
+        }
         let map = new Map({nameMap, information, image});
         await map.save();
         console.log("Insert Map Success..");

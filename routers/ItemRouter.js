@@ -40,8 +40,13 @@ router.post('/new', [uploadMiddleware.single('image'),], async (req, res, next) 
         let { file } = req;
         let { nameItem, priceItem, describe, image} = req.body;
         image = file ? file.filename : '';
-        await ItemController.insert( nameItem, priceItem, describe, image);
-        res.redirect(`/items?id=${userId}`)
+        const errorMessage = await ItemController.insert( nameItem, priceItem, describe, image);
+        
+        if (errorMessage) {
+            res.render('admin/item/insertItems', { userId: userId, errorMessage: errorMessage });
+        } else {
+            res.redirect(`/items?id=${userId}`);
+        }
     } catch (error) {
         console.log(error);
     }

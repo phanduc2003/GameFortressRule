@@ -7,10 +7,10 @@
                     <a href="#" onclick="goHome();">Home</a>
                 </li>
                 <li class="active">
-                    <a href="#">Library</a>
+                    <a href="#" onclick="goLibrary();">Library</a>
                 </li>
                 <li>
-                    <a href="#">Rechange</a>
+                    <a href="#" onclick="goRechange();">Rechange</a>
                 </li>
                 <li>
                     <a href="#">History</a>
@@ -149,7 +149,15 @@
 
 <script>
 
-    
+    const goLibrary = () => {
+        const userId = extractUserIdFromURL();
+        window.location.href = `/library?id=${userId}`;
+    }
+
+    const goRechange = () => {
+        const userId = extractUserIdFromURL();
+        window.location.href = `/rechange?id=${userId}`;
+    }
 
     const goLogout = () => {
         window.location.href = `/logout`;

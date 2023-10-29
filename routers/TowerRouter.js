@@ -40,8 +40,12 @@ router.post('/new', [uploadMiddleware.single('image'),], async (req, res, next) 
         let { file } = req;
         let { nameTower, levelTower, describe, image} = req.body;
         image = file ? file.filename : '';
-        await TowerController.insert( nameTower, levelTower, describe, image );
-        res.redirect(`/towers?id=${userId}`);
+        const errorMessage = await TowerController.insert( nameTower, levelTower, describe, image );
+        if (errorMessage) {
+            res.render('admin/tower/insertTowers', { userId: userId, errorMessage: errorMessage });
+        } else {
+            res.redirect(`/towers?id=${userId}`);
+        }
     } catch (error) {
         console.log(error);
     }

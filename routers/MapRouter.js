@@ -39,8 +39,12 @@ router.post('/new', [uploadMiddleware.single('image'),], async (req, res, next) 
         let { file } = req;
         let { nameMap, information, image } = req.body;
         image = file ? file.filename : '';
-        await MapController.insert( nameMap, information, image );
-        res.redirect(`/maps?id=${userId}`);
+        const errorMessage = await MapController.insert( nameMap, information, image );
+        if (errorMessage) {
+            res.render('admin/map/insertMaps', { userId: userId, errorMessage: errorMessage });
+        } else {
+            res.redirect(`/maps?id=${userId}`);
+        }
     } catch (error) {
         console.log(error);
     }

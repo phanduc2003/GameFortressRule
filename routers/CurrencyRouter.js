@@ -39,8 +39,12 @@ router.post('/new', [uploadMiddleware.single('image'),], async (req, res, next) 
         let { file } = req;
         let { money, gem, image } = req.body;
         image = file ? file.filename : '';
-        await CurrencyController.insert( money, gem, image );
-        res.redirect(`/currencies?id=${userId}`)
+        const errorMessage = await CurrencyController.insert( money, gem, image );
+        if (errorMessage) {
+            res.render('admin/currency/insertCurrencies', { userId: userId, errorMessage: errorMessage });
+        } else {
+            res.redirect(`/currencies?id=${userId}`);
+        }
     } catch (error) {
         console.log(error);
     }

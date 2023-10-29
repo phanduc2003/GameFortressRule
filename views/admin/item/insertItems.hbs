@@ -1,6 +1,11 @@
 <div class="container mt-3">
     <form action="/items/new?id={{userId}}" method="post" enctype="multipart/form-data"> 
         <legend>Insert Enemy</legend>
+        {{#if errorMessage}}
+        <div class="alert alert-danger" role="alert">
+            {{errorMessage}}
+        </div>
+        {{/if}}
         <div class="mb-3">
             <label for="disabledTextInput" class="form-label">Name Item: </label>
             <input type="text" id="disabledTextInput" class="form-control" name="nameItem"  placeholder="Name Item">

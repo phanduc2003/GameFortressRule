@@ -14,6 +14,21 @@ async function getAllEnemy() {
 //INSERT ENEMY
 async function insert(nameEnemy, health, speed, ability, image) {
     try {
+        if (!nameEnemy) {
+            return "Please check Name Enemy";
+        }
+        else if (!health) {
+            return "Please check Health";
+        }
+        else if (!speed) {
+            return "Please check Speed";
+        }
+        else if (!ability) {
+            return "Please check Ability";
+        }
+        else if (!image) {
+            return "Please check Image";
+        }
         let enemy = new Enemy({nameEnemy, health, speed, ability, image });
         await enemy.save();
         console.log("Insert Enemy Success..");
