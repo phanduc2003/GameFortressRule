@@ -13,9 +13,9 @@
                     <a href="#" onclick="goRechange('{{user._id}}')">Rechange</a>
                 </li>
                 <li>
-                    <a href="#">History</a>
+                    <a href="#" onclick="goHistory('{{user._id}}')">History</a>
                 </li>
-<li>
+                <li>
                     <a class="btn btn-outline-dark" href="/logout">LOG OUT</a>
                 </li>
             </ul>
@@ -31,7 +31,7 @@
                     <ul>
                         <p><strong>Username:</strong> {{user.username}}</p>
                         <p><strong>Email:</strong> {{user.email}}</p>
-                         <p>
+                        <p>
                             <strong>Your Gem:</strong>
                             {{user.myGem}}
                             <img src="images/gem.png" alt="Gem Icon" class="gem-icon">
@@ -50,7 +50,7 @@
     const goEditProfile = (userId) => {
         window.location.href = `/${userId}/edit`;
     }
-    
+
     const goLogout = () => {
         window.location.href = `/logout`;
     }
@@ -58,10 +58,15 @@
     const goLibrary = (userId) => {
         window.location.href = `/library?id=${userId}`;
     }
-    
+
     const goRechange = (userId) => {
         window.location.href = `/rechange?id=${userId}`;
     }
+
+    const goHistory = (userId) => {
+        window.location.href = `/history?id=${userId}`;
+    }
+
 
 </script>
 

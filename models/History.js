@@ -2,19 +2,18 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const HistorySchema = new Schema({
-    nameMap: {
-      type: String,
-      required: true,
+    action: {
+        type: String,
+        required: true,
     },
-    information: {
-      type: String,
-      required: true,
+    date: {
+        type: Date,
+        default: Date.now,
     },
-    image: {
-      type: String,
-      required: true,
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
     },
-  });
-  
+});
 
 module.exports = mongoose.model('History', HistorySchema);

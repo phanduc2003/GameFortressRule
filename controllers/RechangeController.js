@@ -1,5 +1,6 @@
 const Currency = require('../models/Currency');
 const User = require('../models/User');
+const History = require('../models/History');
 
 //GET ALL
 async function getAll() {
@@ -32,9 +33,18 @@ async function getOneUser(_id) {
     }
 }
 
-async function updateMyGem(userId, gemAmount) {
+async function updateMyGem(userId, gemAmount, currency) {
     try {
         await User.updateOne({ _id: userId }, { $inc: { myGem: gemAmount } });
+
+        const historyRecord = new History({
+            action: `Purchased ${gemAmount} gems for ${currency.money} VND`,
+            user: userId,
+        });
+
+        await historyRecord.save();
+
+        await User.findByIdAndUpdate(userId, { $push: { history: historyRecord._id }, $inc: { myGem: gemAmount } });
     } catch (err) {
         console.log(err);
         throw err;

@@ -53,13 +53,15 @@ router.post('/payment', async (req, res) => {
         }
 
         const currency = await RechangeController.getCurrencyById(currencyId);
+        
         if (!currency) {
             return res.status(404).send('Currency not found');
         }
 
-        await RechangeController.updateMyGem(userId, currency.gem);
+        await RechangeController.updateMyGem(userId, currency.gem, currency);
 
         res.redirect(`/rechange?id=${userId}`);
+        // res.redirect(`/history/${userId}`);
     } catch (error) {
         console.log(error);
         res.status(500).send('Internal Server Error');

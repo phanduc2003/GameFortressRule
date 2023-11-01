@@ -52,6 +52,9 @@ app.use('/library', LibraryRouter);
 let RechangeRouter = require('./routers/RechangeRouter');
 app.use('/rechange', RechangeRouter);
 
+let HistoryRouter = require('./routers/HistoryRouter');
+app.use('/history', HistoryRouter);
+
 app.listen('3000', () =>{
     console.log("http://localhost:3000/");
 })

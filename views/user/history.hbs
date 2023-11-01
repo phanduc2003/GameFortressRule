@@ -1,0 +1,125 @@
+<div class="wrapper d-flex align-items-stretch">
+    <nav id="sidebar" class="fixed-top">
+        <div class="p-4 pt-5">
+            <a href="#" class="img logo rounded-circle mb-5" style="background-image: url(images/avatar.png);"></a>
+            <ul class="list-unstyled components mb-5">
+                <li>
+                    <a href="#" onclick="goHome();">Home</a>
+                </li>
+                <li>
+                    <a href="#" onclick="goLibrary();">Library</a>
+                </li>
+                <li>
+                    <a href="#" onclick="goRechange();">Rechange</a>
+                </li>
+                <li class="active">
+                    <a href="#">History</a>
+                </li>
+                <li>
+                    <a class="btn btn-outline-dark" href="/logout">LOG OUT</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Content  -->
+    <div id="content" class="p-4 p-md-5">
+        <div class="box-header d-flex justify-content-between align-items-center">
+            <h3 class="box-title"><b>H I S T O R Y</b></h3>
+        </div><!-- /.box-header -->
+
+        <div class="history-container">
+            <div class="card-container">
+                {{#each userHistory }}
+                <div class="history-card">
+                    <div class="history-card-content">
+                        <h4 class="history-action">{{action}}</h4>
+                        <p class="history-date">TIme: {{date}}</p>
+                    </div>
+                </div>
+                {{/each}}
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+    const goLibrary = () => {
+        const userId = extractUserIdFromURL();
+        window.location.href = `/library?id=${userId}`;
+    }
+    function goHome() {
+        const userId = extractUserIdFromURL();
+        window.location.href = `/homeUser?id=${userId}`;
+    }
+    const goRechange = () => {
+        const userId = extractUserIdFromURL();
+        window.location.href = `/rechange?id=${userId}`;
+    }
+
+    const goLogout = () => {
+        window.location.href = `/logout`;
+    }
+
+    const goDetail = (id) => {
+        const userId = extractUserIdFromURL(); // Trích xuất ID người dùng từ URL hiện tại
+        window.location.href = `/rechange/${id}?id=${userId}`;
+    }
+
+
+    function extractUserIdFromURL() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const userId = urlParams.get('id');
+        return userId;
+    }
+
+
+</script>
+
+<style>
+    .personal-info {
+        border: 1px solid #000000;
+        padding: 20px;
+    }
+
+    #content {
+        margin-left: 300px;
+    }
+
+    #sidebar {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+    }   
+
+    .history-container {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .history-card {
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin: 10px;
+        padding: 15px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        flex: 1;
+        /* Để hiển thị 3 thẻ mỗi hàng */
+    }
+
+    .history-card-content {
+        text-align: center;
+    }
+
+    .history-action {
+        font-size: 18px;
+        margin: 5px 0;
+    }
+
+    .history-date {
+        color: #888;
+    }
+</style>

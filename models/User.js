@@ -22,6 +22,10 @@ const UserSchema = new Schema({
       type: Number,
       required: true,
     },
+    history: [{
+      type: Schema.Types.ObjectId,
+      ref: 'History',
+  }],
   });
   
 

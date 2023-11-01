@@ -13,7 +13,7 @@
                     <a href="#" onclick="goRechange();">Rechange</a>
                 </li>
                 <li>
-                    <a href="#">History</a>
+                    <a href="#" onclick="goHistory();">History</a>
                 </li>
                 <li>
                     <a class="btn btn-outline-dark" href="/logout">LOG OUT</a>
@@ -157,6 +157,11 @@
     const goRechange = () => {
         const userId = extractUserIdFromURL();
         window.location.href = `/rechange?id=${userId}`;
+    }
+
+    const goHistory = () => {
+        const userId = extractUserIdFromURL();
+        window.location.href = `/history?id=${userId}`;
     }
 
     const goLogout = () => {
