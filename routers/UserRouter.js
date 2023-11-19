@@ -25,6 +25,23 @@ router.get('/', async (req, res) => {
     }
 });
 
+router.get('/:id/changeStatus', async (req, res, next) => {
+    const _id = req.params.id;
+    let userId = req.query.id;
+    try {
+        const users = await UserController.getById(_id);
+        if (users) {
+            const newCheckAdmin = !users.checkAdmin; // Đảo ngược trạng thái hiện tại
+            await UserController.updateCheckAdmin(_id, newCheckAdmin);
+            console.log(`Change checkAdmin ${_id} to ${newCheckAdmin ? 'activated' : 'deactivated'}`);
+        }
+        res.redirect(`/user?id=${userId}`);
+    } catch (error) {
+        console.log(error);
+    }
+});
+
+
 //DELETE USER
 router.get('/:id/deleteById', async (req, res, next) => {
     let _id = req.params.id;

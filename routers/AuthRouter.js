@@ -1,8 +1,10 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const moment = require('moment-timezone');
 const router = express.Router();
 
 const AuthController = require('../controllers/AuthController');
+let StatsController = require('./../controllers/StatsController');
 
 //LOGIN
 router.get('/login', (req, res) => {
@@ -20,6 +22,7 @@ router.post('/login', async (req, res) => {
         }
 
         console.log("Trạng thái admin:", loggedInUser.checkAdmin);
+        
         if (loggedInUser.checkAdmin === true) {
             res.redirect(`/homeAdmin?id=${loggedInUser._id}`);
         } else {
@@ -56,22 +59,7 @@ router.get('/logout', (req, res) => {
     res.redirect('/login');
 });
 
-//PROFILE ADMIN
-router.get('/homeAdmin', async (req, res) => {
-    const _id = req.query.id;
-    try {
-        const user = await AuthController.profile(_id);
-        if (!user) {
-            res.redirect('/login');
-            console.log('Thông tin user: ' + _id);
-            return;
-        }
-        res.render('homeAdmin', { user });
-    } catch (error) {
-        console.error(error);
-        res.redirect('/login');
-    }
-});
+
 
 //PROFILE USER
 router.get('/homeUser', async (req, res) => {
@@ -129,6 +117,8 @@ router.post('/:id/update', async (req, res, next) => {
         user.email = txtEmail;
 
         await user.save();
+        
+        res.locals.updateSuccess = true;
 
         if (user.checkAdmin === true) {
             return res.redirect(`/homeAdmin?id=${_id}`);
@@ -150,5 +140,55 @@ router.get('/logout', (req, res) => {
     })
 });
 
+//THONG KE
+router.get('/homeAdmin', async (req, res) => {
+    const _id = req.query.id;
+    try {
+        const user = await AuthController.profile(_id);
+        if (!user) {
+            res.redirect('/login');
+            console.log('Thông tin user: ' + _id);
+            return;
+        }
+        // Fetch data for statistical report
+        let dailyStats = await StatsController.getDailyStats();
+        let dailyUserStats = await StatsController.getDailyUserStats();
+
+        let totalRegisteredUsers = await AuthController.getTotalRegisteredUsers();
+
+        res.render('homeAdmin', {user, dailyStats, dailyUserStats, totalRegisteredUsers });
+    } catch (error) {
+        console.log("Error in stats route:", error);
+        res.redirect('/login');
+    }
+});
+
+
+router.get('/daily', async (req, res) => {
+    try {
+        const startDate = req.query.startDate;
+        const endDate = req.query.endDate;
+
+        let dailyStats = await StatsController.getDailyStats(startDate, endDate);
+        res.json(dailyStats);
+    } catch (error) {
+        console.log("Error in daily stats route:", error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+//THONG KE USER
+router.get('/userStats', async (req, res) => {
+    try {
+        const startDate = req.query.startDate;
+        const endDate = req.query.endDate;
+
+        let dailyUserStats = await StatsController.getDailyUserStats(startDate, endDate);
+        res.json(dailyUserStats);
+    } catch (error) {
+        console.log("Error in user stats route:", error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
 
 module.exports = router;

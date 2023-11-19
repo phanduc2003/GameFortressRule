@@ -23,4 +23,22 @@ async function deleteById(_id) {
     }
 }
 
-module.exports = {getAllUser, deleteById}
+async function getById(_id) {
+    try {
+        let users = await User.findOne({ _id });
+        return users;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function updateCheckAdmin(_id, checkAdmin) {
+    try {
+        await User.findByIdAndUpdate(_id, { checkAdmin });
+        console.log(`Update checkAdmin success${_id}`);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+module.exports = {getAllUser, deleteById, getById, updateCheckAdmin}

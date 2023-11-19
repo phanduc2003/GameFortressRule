@@ -7,10 +7,15 @@ async function getUserHistory(userId) {
     try {
         const user = await User.findById(userId).populate('history');
         
-        const formattedHistory = user.history.map((record) => ({
-            action: record.action,
-            date: moment(record.date).tz('Asia/Ho_Chi_Minh').format('YYYY-MM-DD HH:mm:ss'),
-        }));
+        const formattedHistory = user.history.map((record) => {
+            const formattedDate = moment(record.date).tz('Asia/Ho_Chi_Minh');
+            return {
+                purchasedMoney: record.purchasedMoney,
+                purchasedGems: record.purchasedGems,
+                date: formattedDate.format('YYYY-MM-DD'),
+                time: formattedDate.format('HH:mm:ss'),
+            };
+        });
 
         return formattedHistory;
     } catch (err) {

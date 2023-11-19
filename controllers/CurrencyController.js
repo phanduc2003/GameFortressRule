@@ -12,7 +12,7 @@ async function getAll() {
 }
 
 //INSERT ENEMY
-async function insert(money, gem, image) {
+async function insert(money, gem) {
     try {
         if (!money) {
             return "Please check Price";
@@ -20,10 +20,7 @@ async function insert(money, gem, image) {
         else if (!gem) {
             return "Please check Gem";
         }
-        else if (!image) {
-            return "Please check Image";
-        }
-        let currency = new Currency({money, gem, image});
+        let currency = new Currency({money, gem});
         await currency.save();
         console.log("Insert Category Success..");
     } catch (error) {
@@ -31,12 +28,11 @@ async function insert(money, gem, image) {
     }
 }
 
-async function update(_id, money, gem, image) {
+async function update(_id, money, gem) {
     try {
         let currency = {
             money: money,
             gem: gem,
-            image: image,
         };
         await Currency.findByIdAndUpdate({ _id }, currency);
         console.log("update Category success..");

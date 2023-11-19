@@ -1,7 +1,25 @@
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <h2>Edit Personal Information</h2>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Ropa+Sans&display=swap');
+
+    .background-container {
+        background-image: url('/images/backHome.gif');
+        /* Đường dẫn đến hình nền của bạn */
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        min-height: 100vh;
+        /* Đảm bảo hình nền chiếm toàn bộ chiều cao của trang */
+        display: flex;
+        align-items: center;
+        padding-left: 50px;
+        font-family: 'Ropa Sans', Helvetica;
+    }
+</style>
+
+<div class="background-container">
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Update Your Profile</h2>
             <form action="/{{nd._id}}/update" method="POST">
                 {{#if error}}
                 <div class="alert alert-danger mt-3">{{error}}</div>
@@ -13,11 +31,14 @@
                 </div>
                 <div class="mb-3">
                     <label for="txtEmail" class="form-label">Email:</label>
-                    <input type="email" id="txtEmail" class="form-control" name="txtEmail" value="{{nd.email}}"
-                        required>
+                    <input type="email" id="txtEmail" class="form-control" name="txtEmail" value="{{nd.email}}" required
+                        readonly>
+                    <div id="emailChangeAlert" class="alert alert-danger mt-3" style="display: none;">
+                        <p>Cannot change email here.</p>
+                    </div>
                 </div>
                 <div class="alert alert-warning mt-3">
-                    <p>Nếu không thay đổi mật khẩu thì giữ nguyên phần dưới</p>
+                    <p>If you don't change the password, keep the bottom part unchanged.</p>
                 </div>
                 <div class="mb-3">
                     <label for="oldPassword" class="form-label">Old Password:</label>
@@ -33,10 +54,44 @@
                     <label for="confirmNewPassword" class="form-label">Confirm New Password:</label>
                     <input type="password" class="form-control" name="confirmNewPassword" id="confirmNewPassword">
                 </div>
-                <button type="submit" class="btn btn-outline-success">Update</button>
-
+                <div class="text-center"> <!-- Thêm class text-center cho phần tử div này -->
+                    <button type="submit" class="btn btn-outline-dark" style="width: 200px;">Update</button>
+                </div>
+                <div id="updateSuccessAlert" class="alert alert-success mt-3" style="display: none;">Successfully updated profile!</div>
             </form>
 
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function () {
+        // Xử lý sự kiện click trên trường email
+        $("#txtEmail").click(function () {
+            // Hiển thị thông báo
+            $("#emailChangeAlert").show();
+
+            // Ẩn thông báo sau 3 giây (3000 milliseconds)
+            setTimeout(function () {
+                $("#emailChangeAlert").hide();
+            }, 3000);
+        });
+    });
+
+    //Button Submit
+      $(document).ready(function () {
+        // Xử lý sự kiện submit form
+        $("form").submit(function () {
+            // Hiển thị thông báo nếu có
+            if ($("#updateSuccessAlert").length) {
+                $("#updateSuccessAlert").show();
+                
+                // Ẩn thông báo sau 3 giây (3000 milliseconds)
+                setTimeout(function () {
+                    $("#updateSuccessAlert").hide();
+                }, 3000);
+            }
+        });
+    });
+
+</script>

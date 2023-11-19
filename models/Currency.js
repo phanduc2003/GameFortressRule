@@ -3,15 +3,11 @@ const Schema = mongoose.Schema;
 
 const CurrencySchema = new Schema({
     money: {
-      type: String,
+      type: Number,
       required: true,
     },
     gem: {
       type: Number,
-      required: true,
-    },
-    image: {
-      type: String,
       required: true,
     },
   });

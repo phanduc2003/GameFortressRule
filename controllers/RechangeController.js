@@ -35,16 +35,24 @@ async function getOneUser(_id) {
 
 async function updateMyGem(userId, gemAmount, currency) {
     try {
-        await User.updateOne({ _id: userId }, { $inc: { myGem: gemAmount } });
+        if (!userId) {
+            throw new Error('Invalid user ID');
+        }
+
+        const formattedMoney = currency.money.toLocaleString();
 
         const historyRecord = new History({
-            action: `Purchased ${gemAmount} gems for ${currency.money} VND`,
+            purchasedMoney: `${formattedMoney}`,
+            purchasedGems: ` ${gemAmount} `,
             user: userId,
         });
+
+        console.log('purchasedMoney:', historyRecord.purchasedMoney);
 
         await historyRecord.save();
 
         await User.findByIdAndUpdate(userId, { $push: { history: historyRecord._id }, $inc: { myGem: gemAmount } });
+        
     } catch (err) {
         console.log(err);
         throw err;

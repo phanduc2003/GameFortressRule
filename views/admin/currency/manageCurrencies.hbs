@@ -41,7 +41,6 @@
       <thead>
         <tr>
           <th>ID</th>
-          <th>Image</th>
           <th>Gem</th>
           <th>Price</th>
           <th>Operation</th>
@@ -51,9 +50,11 @@
         {{#each cc}}
         <tr>
           <td>{{index}}</td>
-          <td><img src="images/{{image}}" alt="" width="150px" height="150px" /></td>
-          <td>{{gem}}</td>
-          <td>{{money}}</td>
+          <td>
+            {{gem}}
+            <img src="/images/gem.png" style="height: 15px; width: 15px;">
+          </td>
+          <td>{{money}} USD</td>
           <td>
             <button class="btn btn-outline-warning" onclick="goEdit('{{_id}}');">Edit</button>
             <button class="btn btn-outline-dark" onclick="goDel('{{_id}}');">Delete</button>

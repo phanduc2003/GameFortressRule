@@ -1,5 +1,22 @@
+<style>
+    body {
+        background-image: url('/images/backLogin.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+    }
+
+    .container {
+        background-color: rgba(255, 255, 255, 0.8);
+        padding: 20px;
+        border-radius: 10px;
+        max-width: 600px;
+        margin: auto;
+    }
+</style>
+
 <div class="container mt-3">
-    <form action="/currencies/new?id={{userId}}" method="post" enctype="multipart/form-data"> 
+    <form action="/currencies/new?id={{userId}}" method="post"> 
         <legend>Insert Currency</legend>
         {{#if errorMessage}}
         <div class="alert alert-danger" role="alert">
@@ -7,30 +24,13 @@
         </div>
         {{/if}}
         <div class="mb-3">
-            <label for="disabledTextInput" class="form-label">Gem: </label>
+            <label for="Gem" class="form-label">Gem: </label>
             <input type="text" id="disabledTextInput" class="form-control" name="gem"  placeholder="Gem">
         </div>
         <div class="mb-3">
-            <label for="disabledTextInput" class="form-label">Price: </label>
+            <label for="Money" class="form-label">Price: </label>
             <input type="text" id="disabledTextInput" class="form-control" name="money"  placeholder="Price">
-        </div>
-        <div class="mb-3">
-            <label for="formFileSm" class="form-label">Image: </label>
-            <input type="file" name="image" id="image" value="{{cc.image}}" onchange="loadFile(event);" /> <br />
-            <img width="100" height="100" id="img-display" alt="Image" src="{{image}}" />
         </div>
         <button type="submit" class="btn btn-outline-success">Submit</button>
     </form>
 </div>
-
-<script>
-    const loadFile = function (event) {
-        const reader = new FileReader();
-        reader.onload = function () {
-            var output = document.getElementById('img-display');
-            output.src = reader.result;
-        };
-        reader.readAsDataURL(event.target.files[0]);
-    };
-
-</script>

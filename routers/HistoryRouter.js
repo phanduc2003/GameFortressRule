@@ -7,10 +7,14 @@ const HistoryController = require('../controllers/HistoryController');
 router.get('/', async (req, res) => {
     try {
         const userId = req.query.id; 
-        const userHistory = await HistoryController.getUserHistory(userId);
+        let userHistory = await HistoryController.getUserHistory(userId);
 
-        console.log("222222222222222222222222",userId);
-        console.log("111111111111111111111111",userHistory);
+        // Sắp xếp userHistory theo ngày và thời gian giảm dần
+        userHistory = userHistory.sort((a, b) => {
+            const dateTimeA = new Date(`${a.date} ${a.time}`);
+            const dateTimeB = new Date(`${b.date} ${b.time}`);
+            return dateTimeB - dateTimeA;
+        });
 
         res.render('user/history', { userHistory });
     } catch (error) {

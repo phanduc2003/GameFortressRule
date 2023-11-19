@@ -2,6 +2,11 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const mongoose = require('mongoose'); 
+const handlebars = require('handlebars');
+
+handlebars.registerHelper('status', function (status) {
+    return status ? 'Deactivate' : 'Activate';
+});
 
 app.use(express.static('public'));
 app.use(express.json());
@@ -54,6 +59,7 @@ app.use('/rechange', RechangeRouter);
 
 let HistoryRouter = require('./routers/HistoryRouter');
 app.use('/history', HistoryRouter);
+
 
 app.listen('3000', () =>{
     console.log("http://localhost:3000/");

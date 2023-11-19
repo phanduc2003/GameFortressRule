@@ -1,3 +1,20 @@
+<style>
+    body {
+        background-image: url('/images/backLogin.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+    }
+
+    .container {
+        background-color: rgba(255, 255, 255, 0.8);
+        padding: 20px;
+        border-radius: 10px;
+        max-width: 600px;
+        margin: auto;
+    }
+</style>
+
 <div class="container mt-3">
   <form action="/maps/{{mp._id}}/edit?id={{userId}}" method="post" enctype="multipart/form-data">
     <legend>Insert Map</legend>

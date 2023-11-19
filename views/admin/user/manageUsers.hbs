@@ -55,6 +55,13 @@
           <td>{{email}}</td>
           <td>{{checkAdmin}}</td>
           <td>
+            <button class="btn btn-outline-success" onclick="changeStatus('{{_id}}', '{{checkAdmin}}');">
+            {{#if checkAdmin}}
+            Activate
+            {{else}}
+            Deactivate
+            {{/if}}
+          </button>
             <button class="btn btn-outline-dark" onclick="goDel('{{_id}}');">Delete</button>
           </td>
         </tr>
@@ -70,6 +77,14 @@
     if (confirm("Ban co chac muon xoa?")) {
       const userId = extractUserIdFromURL();
       location.href = `/user/${id}/deleteById?id=${userId}`;
+    }
+  }
+
+  const changeStatus = (id, currentStatus) => {
+    const userId = extractUserIdFromURL();
+    const confirmMessage = currentStatus ? 'deactivate' : 'activate';
+    if (confirm(`Are you sure you want to ${confirmMessage} this user?`)) {
+      location.href = `/user/${id}/changeStatus?id=${userId}`;
     }
   }
 

@@ -44,5 +44,14 @@ async function profile(_id) {
     }
 }
 
+async function getTotalRegisteredUsers() {
+    try {
+        const totalUsers = await User.countDocuments();
+        return totalUsers;
+    } catch (error) {
+        console.log("Error in getTotalRegisteredUsers():", error);
+    }
+}
 
-module.exports = {signup, login, profile}
+
+module.exports = {signup, login, profile, getTotalRegisteredUsers }

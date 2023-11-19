@@ -3,9 +3,8 @@ const mongoose = require('mongoose');
 const router = express.Router();
 
 const CurrencyController = require('../controllers/CurrencyController');
-let uploadMiddleware = require('../middleware/upload');
 
-//GET ALL ENEMY
+//GET ALL
 router.get('/', async (req, res) => {
     try {
         let currencies = await CurrencyController.getAll();
@@ -14,7 +13,6 @@ router.get('/', async (req, res) => {
                 _id: el._id,
                 money: el.money,
                 gem: el.gem,
-                image: el.image,
                 index: index + 1,
             }
         });
@@ -26,20 +24,19 @@ router.get('/', async (req, res) => {
     }
 });
 
-//INSERT ENEMY
+//INSERT 
 router.get('/new', (req, res) => {
     let userId = req.query.id;
     res.render('admin/currency/insertCurrencies', { userId: userId });  
 });
 
-//HANDLE INSERT ENEMY   
-router.post('/new', [uploadMiddleware.single('image'),], async (req, res, next) => {
+//HANDLE INSERT    
+router.post('/new', async (req, res, next) => {
     let userId = req.query.id;
     try {
-        let { file } = req;
-        let { money, gem, image } = req.body;
-        image = file ? file.filename : '';
-        const errorMessage = await CurrencyController.insert( money, gem, image );
+       
+        let { money, gem } = req.body;
+        const errorMessage = await CurrencyController.insert( money, gem );
         if (errorMessage) {
             res.render('admin/currency/insertCurrencies', { userId: userId, errorMessage: errorMessage });
         } else {
@@ -63,18 +60,12 @@ router.get('/:id/edit', async function (req, res, next) {
 });
 
 //HANDLE UPDATE ENEMY
-router.post('/:id/edit', [uploadMiddleware.single('image'), ], async function (req, res, next) {
+router.post('/:id/edit', async function (req, res, next) {
     let userId = req.query.id;
     let _id = req.params.id;
     try {
-        let { file } = req;
-        let { money, gem, image } = req.body;
-        if (file) {
-            image = file.filename;
-        }else{
-            image = image;
-        } 
-        await CurrencyController.update(_id, money, gem, image);
+        let { money, gem } = req.body;
+        await CurrencyController.update(_id, money, gem);
         res.redirect(`/currencies?id=${userId}`);
     } catch (error) {
         console.log(error);
