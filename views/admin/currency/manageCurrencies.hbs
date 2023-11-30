@@ -1,7 +1,8 @@
 <div class="wrapper d-flex align-items-stretch">
   <nav id="sidebar" class="fixed-top">
     <div class="p-4 pt-5">
-      <a href="#" onclick="goHomeAdmin();" class="img logo rounded-circle mb-5" style="background-image: url(images/avatar.png);"></a>
+      <a href="#" onclick="goHomeAdmin();" class="img logo rounded-circle mb-5"
+        style="background-image: url(images/avatar.png);"></a>
       <ul class="list-unstyled components mb-5">
         <li>
           <a href="#" onclick="goHomeAdmin();">Home</a>
@@ -67,6 +68,11 @@
 </div>
 
 <script>
+  const goLogout = () => {
+    window.location.href = `/logout`;
+    return window.history.replaceState({}, document.title, "/login");
+  }
+
   function goDel(id) {
     if (confirm("Ban co chac muon xoa?")) {
       const userId = extractUserIdFromURL();

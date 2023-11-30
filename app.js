@@ -1,4 +1,5 @@
 const express = require('express');
+const session = require('express-session');
 const app = express();
 const path = require('path');
 const mongoose = require('mongoose'); 
@@ -14,6 +15,12 @@ app.use(express.urlencoded({ extended: false }));
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
+
+app.use(session({
+    secret: 'your-secret-key',
+    resave: false,
+    saveUninitialized: true,
+}));
 
 const connDb = async () => {
     let uri = "mongodb+srv://phanvanduc:duc12345@fortressrulle.qbyqrcx.mongodb.net/?retryWrites=true&w=majority"

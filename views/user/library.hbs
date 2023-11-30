@@ -64,11 +64,13 @@
         margin: auto;
     }
 
-    .btn {
+    .btnTab {
         width: 20%;
         /* Chiều rộng 100% */
+    }
+
+    .btn {
         margin-right: 10px;
-        /* Khoảng cách giữa các nút */
     }
 
     /*SHOWDETAIL*/
@@ -92,7 +94,7 @@
                     <a href="#" onclick="goHistory();">History</a>
                 </li>
                 <li>
-                    <a class="btn btn-outline-dark" href="/logout">LOG OUT</a>
+                    <a class="btn btn-outline-dark" href="#" onclick="goLogout()">LOG OUT</a>
                 </li>
             </ul>
         </div>
@@ -105,13 +107,13 @@
         </div><!-- /.box-header -->
         <div class="list-unstyled components mb-5">
             <li>
-                <button class="btn btn-outline-dark" onclick="showTab('enemies')">Enemies</button>
+                <button class="btn btn-outline-dark btnTab" onclick="showTab('enemies')">Enemies</button>
 
-                <button class="btn btn-outline-dark" onclick="showTab('towers')">Towers</button>
+                <button class="btn btn-outline-dark btnTab" onclick="showTab('towers')">Towers</button>
 
-                <button class="btn btn-outline-dark" onclick="showTab('maps')">Maps</button>
+                <button class="btn btn-outline-dark btnTab" onclick="showTab('maps')">Maps</button>
 
-                <button class="btn btn-outline-dark" onclick="showTab('items')">Items</button>
+                <button class="btn btn-outline-dark btnTab" onclick="showTab('items')">Items</button>
             </li>
         </div>
         <!-- Bảng Enemies -->
@@ -246,6 +248,7 @@
 
     const goLogout = () => {
         window.location.href = `/logout`;
+        return window.history.replaceState({}, document.title, "/login");
     }
 
     function extractUserIdFromURL() {

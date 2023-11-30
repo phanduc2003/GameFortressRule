@@ -6,8 +6,10 @@ async function signup(username, password, email, isAdmin = false) {
         let user = new User({ username, password, email, checkAdmin: isAdmin, myGem: 0 });
         await user.save();
         console.log("Register Success..");
+        return true;
     } catch (err) {
         console.log(err);
+        return false;
     }
 }
 

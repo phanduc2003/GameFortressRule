@@ -22,7 +22,7 @@ router.post('/login', async (req, res) => {
         }
 
         console.log("Trạng thái admin:", loggedInUser.checkAdmin);
-        
+
         if (loggedInUser.checkAdmin === true) {
             res.redirect(`/homeAdmin?id=${loggedInUser._id}`);
         } else {
@@ -47,18 +47,40 @@ router.post('/signup', async (req, res) => {
         if (txtPassword !== txtConfirmPassword) {
             return res.render('register', { error: 'Mật khẩu và mật khẩu xác nhận không khớp.' });
         }
-        await AuthController.signup(txtUsername, txtPassword, txtEmail, isAdmin);
-        res.redirect("/login");
+        const registrationSuccess = await AuthController.signup(txtUsername, txtPassword, txtEmail, isAdmin);
+
+        if (registrationSuccess) {
+            res.locals.registrationSuccess = true;
+            res.redirect("/login");
+        } else {
+            // Xử lý khi đăng ký thất bại
+            res.render('register', { error: 'Đã xảy ra lỗi khi đăng ký.' });
+        }
     } catch (error) {
         console.log(error);
     }
 });
 
 //LOGOUT
-router.get('/logout', (req, res) => {
-    res.redirect('/login');
-});
+router.get('/logout', async (req, res) => {
+    try {
+        // Xóa phiên đăng nhập
+        req.session.destroy((err) => {
+            if (err) {
+                console.error(err);
+            } else {
+                res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+                res.setHeader('Pragma', 'no-cache');
+                res.setHeader('Expires', '0');
 
+                res.status(303).redirect('/login');
+            }
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+});
 
 
 //PROFILE USER
@@ -117,7 +139,7 @@ router.post('/:id/update', async (req, res, next) => {
         user.email = txtEmail;
 
         await user.save();
-        
+
         res.locals.updateSuccess = true;
 
         if (user.checkAdmin === true) {
@@ -129,16 +151,6 @@ router.post('/:id/update', async (req, res, next) => {
     }
 });
 
-router.get('/logout', (req, res) => {
-    req.session.destroy(function(err){
-        if(err){
-            console.log(err);
-            res.send("Error");
-        }else{
-            res.redirect('/login')
-        }
-    })
-});
 
 //THONG KE
 router.get('/homeAdmin', async (req, res) => {
@@ -156,7 +168,7 @@ router.get('/homeAdmin', async (req, res) => {
 
         let totalRegisteredUsers = await AuthController.getTotalRegisteredUsers();
 
-        res.render('homeAdmin', {user, dailyStats, dailyUserStats, totalRegisteredUsers });
+        res.render('homeAdmin', { user, dailyStats, dailyUserStats, totalRegisteredUsers });
     } catch (error) {
         console.log("Error in stats route:", error);
         res.redirect('/login');

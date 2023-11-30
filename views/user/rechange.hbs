@@ -16,7 +16,7 @@
                     <a href="#" onclick="goHistory();">History</a>
                 </li>
                 <li>
-                    <a class="btn btn-outline-dark" href="/logout">LOG OUT</a>
+                    <a class="btn btn-outline-dark" href="#" onclick="goLogout()">LOG OUT</a>
                 </li>
             </ul>
         </div>
@@ -58,6 +58,10 @@
 
 
 <script>
+    const goLogout = () => {
+        window.location.href = `/logout`;
+        return window.history.replaceState({}, document.title, "/login");
+    }
     const goLibrary = () => {
         const userId = extractUserIdFromURL();
         window.location.href = `/library?id=${userId}`;
@@ -76,9 +80,6 @@
         window.location.href = `/history?id=${userId}`;
     }
 
-    const goLogout = () => {
-        window.location.href = `/logout`;
-    }
 
     const goDetail = (id) => {
         const userId = extractUserIdFromURL(); // Trích xuất ID người dùng từ URL hiện tại

@@ -16,7 +16,7 @@
                     <a href="#">History</a>
                 </li>
                 <li>
-                    <a class="btn btn-outline-dark" href="/logout">LOG OUT</a>
+                    <a class="btn btn-outline-dark" href="#" onclick="goLogout()">LOG OUT</a>
                 </li>
             </ul>
         </div>
@@ -61,6 +61,7 @@
 
     const goLogout = () => {
         window.location.href = `/logout`;
+        return window.history.replaceState({}, document.title, "/login");
     }
 
     const goDetail = (id) => {

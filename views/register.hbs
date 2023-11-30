@@ -23,9 +23,10 @@
         margin-left: auto;
         margin-right: auto;
     }
+
     .orange-text {
-            color: orange;
-        }
+        color: orange;
+    }
 </style>
 
 <div class="container">
@@ -34,10 +35,15 @@
             <div class="custom-container">
                 <form action="/signup" method="post" class="p-3">
                     <h2 class="mb-3 custom-heading">Register</h2>
-                     {{#if error}}
-                    <div class="alert alert-danger" role="alert">
-                        {{error}}
-                    </div>
+                    {{#if error}}
+                        <div class="alert alert-danger" role="alert">
+                            {{error}}
+                        </div>
+                    {{/if}}
+                    {{#if registrationSuccess}}
+                        <div class="alert alert-success" role="alert">
+                            Đăng ký thành công! Vui lòng đăng nhập.
+                        </div>
                     {{/if}}
                     <div class="mb-3">
                         <label for="username" class="form-label" style="color: rgb(204, 204, 204)">Username:</label>
@@ -52,15 +58,18 @@
                         <input type="password" class="form-control" id="password" name="txtPassword" required>
                     </div>
                     <div class="mb-3">
-                        <label for="confirmPassword" class="form-label" style="color: rgb(204, 204, 204)">Confirm Password:</label>
-                        <input type="password" class="form-control" id="confirmPassword" name="txtConfirmPassword" required>
+                        <label for="confirmPassword" class="form-label" style="color: rgb(204, 204, 204)">Confirm
+                            Password:</label>
+                        <input type="password" class="form-control" id="confirmPassword" name="txtConfirmPassword"
+                            required>
                     </div>
                     <hr>
                     <div class="d-flex justify-content-center">
                         <button type="submit" class="btn btn-primary custom-btn">R e g i s t e r</button>
                     </div>
-                    
-                    <p class="mt-3" style="color: rgb(204, 204, 204)">Already have an account? <a href="/login" class="orange-text">Log in now</a></p>
+
+                    <p class="mt-3" style="color: rgb(204, 204, 204)">Already have an account? <a href="/login"
+                            class="orange-text">Log in now</a></p>
                 </form>
             </div>
         </div>

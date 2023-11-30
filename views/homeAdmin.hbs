@@ -25,7 +25,7 @@
                     <a href="#" onclick="goEnemies('{{user._id}}');">Enemies</a>
                 </li>
                 <li>
-                    <a class="btn btn-outline-dark" href="/logout">LOG OUT</a>
+                    <a class="btn btn-outline-dark" href="#" onclick="goLogout()">LOG OUT</a>
                 </li>
             </ul>
         </div>
@@ -116,6 +116,10 @@
 </div>
 
 <script>
+    const goLogout = () => {
+        window.location.href = `/logout`;
+        return window.history.replaceState({}, document.title, "/login");
+    }
 
     const goEditProfile = (userId) => {
         window.location.href = `/${userId}/edit`;
