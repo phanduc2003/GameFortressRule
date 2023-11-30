@@ -1,0 +1,338 @@
+<div class="wrapper d-flex align-items-stretch">
+    <nav id="sidebar" class="fixed-top">
+        <div class="p-4 pt-5">
+            <a href="#" class="img logo rounded-circle mb-5" style="background-image: url(images/avatar.png);"></a>
+            <ul class="list-unstyled components mb-5">
+                <li class="active">
+                    <a href="#">Home</a>
+                </li>
+                <li>
+                    <a href="#" onclick="goUsers('{{user._id}}')">Users</a>
+                </li>
+                <li>
+                    <a href="#" onclick="goTowers('{{user._id}}')">Towers</a>
+                </li>
+                <li>
+                    <a href="#" onclick="goCurrencies('{{user._id}}');">Currencies</a>
+                </li>
+                <li>
+                    <a href="#" onclick="goMaps('{{user._id}}');">Maps</a>
+                </li>
+                <li>
+                    <a href="#" onclick="goItems('{{user._id}}');">Items</a>
+                </li>
+                <li>
+                    <a href="#" onclick="goEnemies('{{user._id}}');">Enemies</a>
+                </li>
+                <li>
+                    <a class="btn btn-outline-dark" href="#" onclick="goLogout()">LOG OUT</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Content  -->
+    <div id="content" class="p-4 p-md-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div id="statsInfoWrapper" class="border border-secondary p-4">
+                        <h1>Your Profile</h1>
+                        <ul>
+                            <p><strong>Username:</strong> {{user.username}}</p>
+                            <p><strong>Email:</strong> {{user.email}}</p>
+                            <button class="btn btn-outline-dark" onclick="goEditProfile('{{user._id}}')">Update Your
+                                Profile</button>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            {{!-- THONG KE --}}
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="statsInfoWrapper" class="border p-4">
+                        <h3>Daily Statistics</h3>
+                        <p><strong>Total Purchased Money:</strong> <span id="totalPurchasedMoney"></span></p>
+                        <div id="statsInfo" class="mt-5">
+
+                            <form id="dateRangeForm" class="form-inline">
+                                <div class="form-group mr-2">
+                                    <label for="startDate" class="mr-2">Start Date:</label>
+                                    <input type="date" id="startDate" name="startDate" class="form-control" required>
+                                </div>
+
+                                <div class="form-group mr-2">
+                                    <label for="endDate" class="mr-2">End Date:</label>
+                                    <input type="date" id="endDate" name="endDate" class="form-control" required>
+                                </div>
+
+                                <button type="button" class="btn btn-outline-secondary" onclick="fetchAndDrawStats()">Fetch
+                                    Stats</button>
+                            </form>
+
+                            <canvas id="dailyChart" width="80" height="40"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            {{!-- THONG KE USER --}}
+            <!-- User Stats -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="userStatsInfoWrapper" class="border p-4">
+                        <h3>User Registration Statistics</h3>
+                        <p>
+                            <strong>Total Users:</strong> 
+                            {{totalRegisteredUsers}} 
+                            <img src="images/iconUser.png" style="height: 10px; width: 10px;">
+                            </p>
+                        <div id="userStatsInfo" class="mt-5">
+                            <form id="userDateRangeForm" class="form-inline">
+                                <div class="form-group mr-2">
+                                    <label for="userStartDate" class="mr-2">Start Date:</label>
+                                    <input type="date" id="userStartDate" name="userStartDate" class="form-control"
+                                        required>
+                                </div>
+
+                                <div class="form-group mr-2">
+                                    <label for="userEndDate" class="mr-2">End Date:</label>
+                                    <input type="date" id="userEndDate" name="userEndDate" class="form-control"
+                                        required>
+                                </div>
+
+                                <button type="button" class="btn btn-outline-secondary" onclick="fetchAndDrawUserStats()">Fetch
+                                    User Stats</button>
+                            </form>
+                            <canvas id="userStatsChart" width="80" height="40"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    const goLogout = () => {
+        window.location.href = `/logout`;
+        return window.history.replaceState({}, document.title, "/login");
+    }
+
+    const goEditProfile = (userId) => {
+        window.location.href = `/${userId}/edit`;
+    }
+    const goUsers = (userId) => {
+        window.location.href = `/user?id=${userId}`;
+    };
+    const goTowers = (userId) => {
+        window.location.href = `/towers?id=${userId}`;
+    }
+    const goCurrencies = (userId) => {
+        window.location.href = `/currencies?id=${userId}`;
+    }
+    const goMaps = (userId) => {
+        window.location.href = `/maps?id=${userId}`;
+    }
+    const goItems = (userId) => {
+        window.location.href = `/items?id=${userId}`;
+    }
+    const goEnemies = (userId) => {
+        window.location.href = `/enemy?id=${userId}`;
+    }
+
+    //THONG KE
+    document.addEventListener('DOMContentLoaded', async function () {
+        try {
+            // Fetch data for statistical report
+            await fetchAndDrawStats();
+        } catch (error) {
+            console.log("Error fetching and drawing charts:", error);
+        }
+    });
+
+    async function fetchAndDrawStats() {
+        try {
+            const startDateInput = document.getElementById('startDate');
+            const endDateInput = document.getElementById('endDate');
+
+            let startDate = startDateInput.value;
+            let endDate = endDateInput.value;
+
+            // Check if start date and end date are not selected
+            if (!startDate && !endDate) {
+                // If both dates are not selected, set default range (e.g., current week)
+                const today = new Date();
+                const startOfWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay());
+                startDate = startOfWeek.toISOString().split('T')[0];
+                endDate = today.toISOString().split('T')[0];
+
+                // Update the input fields with default values
+                startDateInput.value = startDate;
+                endDateInput.value = endDate;
+            }
+
+            let url = `/daily?startDate=${startDate}&endDate=${endDate}`;
+
+            let dailyStats = await fetch(url).then(response => response.json());
+
+            const totalPurchasedMoney = dailyStats.reduce((total, entry) => total + parseFloat(entry.totalPurchasedMoney), 0).toFixed(2);
+
+            document.getElementById('totalPurchasedMoney').innerText = `${totalPurchasedMoney} USD`;
+            // Parse data for Chart.js
+            const parseStatsData = (stats) => {
+                return {
+                    labels: stats.map(entry => entry._id),
+                    counts: stats.map(entry => entry.count),
+                };
+            };
+
+            // Get parsed data
+            const parsedDailyStats = parseStatsData(dailyStats);
+
+            // Destroy existing chart if it exists
+            destroyChart('dailyChart');
+
+            // Draw charts
+            drawChart('dailyChart', 'Daily Sales', parsedDailyStats, true);
+        } catch (error) {
+            console.log("Error fetching and drawing charts:", error);
+        }
+    }
+
+
+    function destroyChart(canvasId) {
+        const existingChart = Chart.getChart(canvasId);
+        if (existingChart) {
+            existingChart.destroy();
+        }
+    }
+
+    function drawChart(canvasId, label, data, includeAdditionalDates = false) {
+        const ctx = document.getElementById(canvasId).getContext('2d');
+
+        if (includeAdditionalDates) {
+            // ... (các bước xử lý additional dates)
+        }
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: data.labels,
+                datasets: [{
+                    label: label,
+                    data: data.counts,
+                    backgroundColor: 'rgba(255, 165, 0, 0.2)',
+                    borderColor: 'rgba(255, 165, 0, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                // Customize options as needed
+            }
+        });
+    }
+
+    // User Stats
+    document.addEventListener('DOMContentLoaded', async function () {
+        try {
+            // Fetch data for user statistical report
+            await fetchAndDrawUserStats();
+        } catch (error) {
+            console.log("Error fetching and drawing user stats:", error);
+        }
+    });
+
+    async function fetchAndDrawUserStats() {
+        try {
+            const userStartDateInput = document.getElementById('userStartDate');
+            const userEndDateInput = document.getElementById('userEndDate');
+
+            let userStartDate = userStartDateInput.value;
+            let userEndDate = userEndDateInput.value;
+
+            // Check if start date and end date are not selected
+            if (!userStartDate && !userEndDate) {
+                // If both dates are not selected, set default range (e.g., current week)
+                const today = new Date();
+                const startOfWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay());
+                userStartDate = startOfWeek.toISOString().split('T')[0];
+                userEndDate = today.toISOString().split('T')[0];
+
+                // Update the input fields with default values
+                userStartDateInput.value = userStartDate;
+                userEndDateInput.value = userEndDate;
+            }
+
+            let userUrl = `/userStats?startDate=${userStartDate}&endDate=${userEndDate}`;
+
+            let userStats = await fetch(userUrl).then(response => response.json());
+
+            // Parse data for Chart.js
+            const parseUserStatsData = (stats) => {
+                return {
+                    labels: stats.map(entry => entry._id),
+                    counts: stats.map(entry => entry.count),
+                };
+            };
+
+            // Get parsed data
+            const parsedUserStats = parseUserStatsData(userStats);
+
+            // Destroy existing chart if it exists
+            destroyChart('userStatsChart');
+
+            // Draw charts
+            drawUserStatsChart('userStatsChart', 'User Registrations', parsedUserStats, true);
+        } catch (error) {
+            console.log("Error fetching and drawing user stats:", error);
+        }
+    }
+    function drawUserStatsChart(canvasId, label, data, includeAdditionalDates = false) {
+        const ctx = document.getElementById(canvasId).getContext('2d');
+
+        if (includeAdditionalDates) {
+            // ... (các bước xử lý additional dates)
+        }
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: data.labels,
+                datasets: [{
+                    label: label,
+                    data: data.counts,
+                    backgroundColor: 'rgba(255, 165, 0, 0.2)',
+                    borderColor: 'rgba(255, 165, 0, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                // Customize options as needed
+            }
+        });
+    }
+
+
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+    .personal-info {
+        border: 1px solid #000000;
+        padding: 20px;
+    }
+
+    #content {
+        margin-left: 300px;
+    }
+
+    #sidebar {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+    }
+</style>

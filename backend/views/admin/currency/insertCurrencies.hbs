@@ -1,0 +1,36 @@
+<style>
+    body {
+        background-image: url('/images/backLogin.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+    }
+
+    .container {
+        background-color: rgba(255, 255, 255, 0.8);
+        padding: 20px;
+        border-radius: 10px;
+        max-width: 600px;
+        margin: auto;
+    }
+</style>
+
+<div class="container mt-3">
+    <form action="/currencies/new?id={{userId}}" method="post"> 
+        <legend>Insert Currency</legend>
+        {{#if errorMessage}}
+        <div class="alert alert-danger" role="alert">
+            {{errorMessage}}
+        </div>
+        {{/if}}
+        <div class="mb-3">
+            <label for="Gem" class="form-label">Gem: </label>
+            <input type="text" id="disabledTextInput" class="form-control" name="gem"  placeholder="Gem">
+        </div>
+        <div class="mb-3">
+            <label for="Money" class="form-label">Price: </label>
+            <input type="text" id="disabledTextInput" class="form-control" name="money"  placeholder="Price">
+        </div>
+        <button type="submit" class="btn btn-outline-success">Submit</button>
+    </form>
+</div>
