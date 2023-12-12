@@ -11,7 +11,11 @@ router.get('/login', (req, res) => {
     res.render('login');
 });
 
-// Xử lý đăng nhập
+//REGISTER
+router.get('/signup', (req, res) => {
+    res.render('register');
+});
+
 router.post('/login', async (req, res) => {
     try {
         const { txtUsername, txtPassword } = req.body;
@@ -34,11 +38,6 @@ router.post('/login', async (req, res) => {
     }
 });
 
-//REGISTER
-router.get('/signup', (req, res) => {
-    res.render('register');
-});
-
 // Xử lý đăng ký
 router.post('/signup', async (req, res) => {
     try {
@@ -58,6 +57,50 @@ router.post('/signup', async (req, res) => {
         }
     } catch (error) {
         console.log(error);
+    }
+});
+
+// Xử lý đăng nhập
+router.post('/api/login', async (req, res) => {
+    try {
+        const { txtUsername, txtPassword } = req.body;
+        const loggedInUser = await AuthController.login(txtUsername, txtPassword);
+
+        if (!loggedInUser) {
+            return res.status(401).json({ error: 'Tên đăng nhập hoặc mật khẩu không chính xác.' });
+        }
+
+        console.log("Trạng thái admin:", loggedInUser.checkAdmin);
+
+        if (loggedInUser.checkAdmin === true) {
+            return res.status(200).json({ redirect: `/homeAdmin?id=${loggedInUser._id}` });
+        } else {
+            return res.status(200).json({ redirect: `/homeUser?id=${loggedInUser._id}` });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 'Đã xảy ra lỗi khi đăng nhập.' });
+    }
+});
+
+// Xử lý đăng ký
+router.post('/api/signup', async (req, res) => {
+    try {
+        const { txtUsername, txtPassword, txtConfirmPassword, txtEmail, isAdmin } = req.body;
+
+        if (txtPassword !== txtConfirmPassword) {
+            return res.status(400).json({ error: 'Mật khẩu và mật khẩu xác nhận không khớp.' });
+        }
+        const registrationSuccess = await AuthController.signup(txtUsername, txtPassword, txtEmail, isAdmin);
+
+        if (registrationSuccess) {
+            return res.status(200).json({ success: true, message: 'Đăng ký thành công.' });
+        } else {
+            return res.status(500).json({ error: 'Đã xảy ra lỗi khi đăng ký.' });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 'Đã xảy ra lỗi khi đăng ký.' });
     }
 });
 
