@@ -38,6 +38,26 @@ router.post('/login', async (req, res) => {
     }
 });
 
+router.post('/login/ingame', async (req, res) => {
+    try {
+
+        console.log(req.body);
+        const loggedInUser = await AuthController.login(req.body.email, req.body.password);
+        if (!loggedInUser) {
+
+        }
+        else {
+            return res.status(200).json({
+                token: "accesstoken"
+              });
+        }
+
+    } catch (error) {
+        console.log(error);
+        res.render('login', { error: 'Đã xảy ra lỗi khi đăng nhập.' });
+    }
+});
+
 // Xử lý đăng ký
 router.post('/signup', async (req, res) => {
     try {
