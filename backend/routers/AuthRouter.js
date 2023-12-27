@@ -42,14 +42,20 @@ router.post('/login/ingame', async (req, res) => {
     try {
 
         console.log(req.body);
-        const loggedInUser = await AuthController.login(req.body.email, req.body.password);
+        const loggedInUser = await AuthController.login(req.body.username, req.body.password);
         if (!loggedInUser) {
-
+            return res.status(401).json({ error: 'Tên đăng nhập hoặc mật khẩu không chính xác.' });
         }
         else {
             return res.status(200).json({
+                user: {  // Trả về thông tin người dùng khi đăng nhập thành công
+                    _id: loggedInUser._id,
+                    username: loggedInUser.username,
+                    email: loggedInUser.email,
+                    myGem: loggedInUser.myGem
+                },
                 token: "accesstoken"
-              });
+            });
         }
 
     } catch (error) {
