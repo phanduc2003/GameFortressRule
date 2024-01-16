@@ -64,6 +64,34 @@ router.post('/login/ingame', async (req, res) => {
     }
 });
 
+//MUA SKILL TRONG GAME
+router.post('/buySkill', async (req, res) => {
+    try {
+        const userId = req.body.userId;
+        const skillPrice = req.body.skillPrice;
+
+        const loggedInUser = await AuthController.profile(userId);
+        if (!loggedInUser) {
+            return res.status(404).json({ error: 'Người dùng không tồn tại.' });
+        }
+
+        if (loggedInUser.myGem >= skillPrice) {
+            // Trừ gem khi mua skill
+            const newGemValue = loggedInUser.myGem - skillPrice;
+
+            // Cập nhật giá trị gem trong MongoDB
+            const user = await AuthController.updateGem(userId, newGemValue);
+            console.log('Returned User:', user);
+            return res.status(200).json({ success: true, user, message: 'Mua skill thành công.' });
+        } else {
+            return res.status(400).json({ error: 'Không đủ gem để mua skill.' });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 'Đã xảy ra lỗi khi mua skill.' });
+    }
+});
+
 // Xử lý đăng ký
 router.post('/signup', async (req, res) => {
     try {

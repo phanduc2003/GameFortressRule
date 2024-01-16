@@ -55,5 +55,14 @@ async function getTotalRegisteredUsers() {
     }
 }
 
+async function updateGem(userId, newGemValue) {
+    try {
+      const user = await User.findByIdAndUpdate(userId, { $set: { myGem: newGemValue } }, { new: true });
+      console.log('Updated User:', user);
+      return user;
+    } catch (error) {
+      throw error;
+    }
+  }
 
-module.exports = {signup, login, profile, getTotalRegisteredUsers }
+module.exports = {signup, login, profile, getTotalRegisteredUsers, updateGem }
